@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { toZonedTime, fromZonedTime } from "date-fns-tz"
-import { Copy, Trash2, Clock, MoreHorizontal } from "lucide-react"
+import { Copy, Trash2, Clock, MoreHorizontal, EqualIcon, ChevronsRight, ChevronsLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -52,6 +52,9 @@ interface TimezoneCardProps {
   onTimeChange: (newTime: Date, timezone: string) => void
   onCopy: () => void
   onRemove: () => void
+  onMoveLeft: (index : number) => void
+  onMoveRight: (index: number) => void
+
   colorIndex: number
 }
 
@@ -61,6 +64,8 @@ export function TimezoneCard({
   onTimeChange,
   onCopy,
   onRemove,
+  onMoveLeft ,
+  onMoveRight ,
   colorIndex,
 }: TimezoneCardProps) {
   const [localTime, setLocalTime] = useState<Date>(toZonedTime(currentDateTime, timezone))
@@ -121,14 +126,13 @@ export function TimezoneCard({
         className={cn(
           "transition-all  duration-300 hover:shadow-lg border overflow-hidden backdrop-blur-sm",
           gradient,
-          "hover:scale-[1.02]",
         )}
       >
         <div className="p-5">
           {/* Header with timezone name and remove button */}
           <div className="flex justify-between items-center mb-4">
             <div className="space-y-1">
-              <h3 className={cn("font-medium text-sm", textColor)}>{formatTimezoneName(timezone)}</h3>
+              <h3 className={cn("font-medium text-base", textColor)}>{formatTimezoneName(timezone)}</h3>
               <p className={cn("text-xs opacity-70", textColor)}>{getTimezoneOffset(timezone)}</p>
             </div>
             <DropdownMenu>
@@ -139,12 +143,21 @@ export function TimezoneCard({
                   className="h-8 w-8 rounded-full hover:bg-background/20"
                   aria-label="More options"
                 >
-                  <MoreHorizontal className="h-4 w-4" />
+                  <EqualIcon className="h-6 w-6" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={handleDelete} className="text-destructive focus:text-destructive">
-                  <Trash2 className="mr-2 h-4 w-4" />
+              <DropdownMenuContent align="end" >
+                <DropdownMenuItem onClick={() => onMoveLeft(colorIndex)} >
+                  <ChevronsLeft className="mr-2 h-3 w-3 text-sm" />
+                  Move Left
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => onMoveRight(colorIndex)} >
+                  <ChevronsRight className="mr-2 h-3 w-3 text-sm" />
+                  Move Right
+                </DropdownMenuItem>
+                <hr></hr>
+                <DropdownMenuItem onClick={handleDelete} className="text-sm text-destructive focus:text-destructive">
+                  <Trash2 className="mr-2 h-3 w-3" />
                   Delete
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -164,14 +177,14 @@ export function TimezoneCard({
             </div>
 
             {/* Custom Time Input - Always visible unless editing */}
-            <div className="space-y-2">
+            <div className="space-y-2">              
               <Input
                 id={`datetime-${timezone}`}
                 type="datetime-local"
                 value={dateTimeString}
                 onChange={handleTimeChange}
                 className={cn(
-                  "bg-background/30 border-0 backdrop-blur-sm",
+                  "bg-background/30 border-0 backdrop-blur-sm dark:text-white",
                   "focus:ring-2 focus:ring-primary/50 focus:bg-background/50",
                   textColor,
                 )}

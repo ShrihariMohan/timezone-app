@@ -126,6 +126,37 @@ export default function TimezoneApp() {
     setShowToolbar(!showToolbar)
   }
 
+  const onMoveLeft = (index : number) => {
+    console.log("🔥 ~ onMoveLeft ~ index:", index, timezones)
+    if ( index === 0) { 
+      return
+    }
+    else {
+      console.log("🔥 ~ onMoveLeft ~ else:")
+
+    const updatedTimezones = [...timezones]; // Create a new array
+    [updatedTimezones[index - 1], updatedTimezones[index]] = [updatedTimezones[index], updatedTimezones[index - 1]]; // Swap
+
+
+      console.log("🔥 ~ onMoveLeft ~ timezones:", updatedTimezones)
+      setTimezones(updatedTimezones)
+    }
+   
+  }
+
+  const onMoveRight = (index : number) => {
+
+    if ( index === timezones.length - 1) { 
+      return
+    }
+    else {
+    const updatedTimezones = [...timezones]; // Create a new array
+    [updatedTimezones[index + 1], updatedTimezones[index]] = [updatedTimezones[index], updatedTimezones[index + 1]]; // Swap
+
+      setTimezones(updatedTimezones)
+    }
+  }
+
   // Filter timezones based on search query
   const filteredTimezones = allTimezones.filter(
     (tz) => !timezones.includes(tz) && tz.toLowerCase().replace(/_/g, " ").includes(searchQuery.toLowerCase()),
@@ -155,14 +186,14 @@ export default function TimezoneApp() {
         </div> */}
 
         {/* Floating Glassmorphism Toolbar */}
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+        <div className="fixed bottom-0  sm:bottom-8 left-1/2 transform -translate-x-1/2 z-10 ">
           <div
             className={cn(
               "transition-all duration-300 ease-in-out",
               showToolbar ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none",
             )}
           >
-            <div className="flex items-center gap-4 p-4 rounded-full backdrop-blur-md bg-background/60 border border-background/20 shadow-lg">
+            <div className="flex items-center gap-4 p-4 sm:rounded-full backdrop-blur-md bg-background/60 border border-background/20 shadow-lg">
               <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -231,7 +262,7 @@ export default function TimezoneApp() {
             size="sm"
             onClick={toggleToolbar}
             className={cn(
-              "absolute -bottom-11 left-1/2 transform -translate-x-1/2 rounded-full w-12 h-12 p-0",
+              "invisible sm:visible absolute -bottom-11 left-1/2 transform -translate-x-1/2 rounded-full w-12 h-12 p-0",
               "shadow-lg border-2",
               darkMode ? "border-gray-700" : "border-gray-200",
               
@@ -250,6 +281,8 @@ export default function TimezoneApp() {
               onTimeChange={updateTime}
               onCopy={() => copyTimeToClipboard(timezone)}
               onRemove={() => removeTimezone(timezone)}
+              onMoveLeft={() => onMoveLeft(index)}
+              onMoveRight={() => onMoveRight(index)}
               colorIndex={index}
             />
           ))}
