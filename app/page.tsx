@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
-import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown } from "lucide-react"
+import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown, RefreshCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -18,6 +18,7 @@ export default function TimezoneApp() {
   const [allTimezones, setAllTimezones] = useState<string[]>([])
   const [selectedTimezone, setSelectedTimezone] = useState<string>("")
   const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date())
+  const [autoUpdate, setAutoUpdate] = useState<boolean>(true)
   const [darkMode, setDarkMode] = useState<boolean>(false)
   const [showToolbar, setShowToolbar] = useState<boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>("")
@@ -52,13 +53,18 @@ export default function TimezoneApp() {
       localStorage.setItem("timezones", JSON.stringify(defaultTimezones))
     }
 
-    // Update time every minute
-    const interval = setInterval(() => {
-      setCurrentDateTime(new Date())
-    }, 20000)
+    // Update time periodically when auto update is enabled
+    let interval: NodeJS.Timeout | undefined
+    if (autoUpdate) {
+      interval = setInterval(() => {
+        setCurrentDateTime(new Date())
+      }, 20000)
+    }
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [autoUpdate])
 
   // Save timezones to localStorage when they change
   useEffect(() => {
@@ -104,6 +110,7 @@ export default function TimezoneApp() {
   }
 
   const updateTime = (newTime: Date, timezone: string) => {
+    setAutoUpdate(false)
     setCurrentDateTime(newTime)
   }
 
@@ -124,6 +131,11 @@ export default function TimezoneApp() {
 
   const toggleToolbar = () => {
     setShowToolbar(!showToolbar)
+  }
+
+  const resetTime = () => {
+    setCurrentDateTime(new Date())
+    setAutoUpdate(true)
   }
 
   const onMoveLeft = (index : number) => {
@@ -252,6 +264,16 @@ export default function TimezoneApp() {
                 aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
               >
                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </Button>
+
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={resetTime}
+                className="bg-background/50 backdrop-blur-sm border-0 hover:bg-background/70 rounded-full"
+                aria-label="Reset to current time"
+              >
+                <RefreshCcw className="h-5 w-5" />
               </Button>
             </div>
           </div>
