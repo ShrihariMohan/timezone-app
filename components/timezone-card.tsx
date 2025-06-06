@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { toZonedTime, fromZonedTime } from "date-fns-tz"
-import { Copy, Trash2, Clock, MoreHorizontal, Equal, ChevronsRight, ChevronsLeft, Pencil } from "lucide-react"
+import { Copy, Trash2, Equal, Pencil } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -53,8 +53,6 @@ interface TimezoneCardProps {
   onTimeChange: (newTime: Date, timezone: string) => void
   onCopy: () => void
   onRemove: () => void
-  onMoveLeft: (index: number) => void
-  onMoveRight: (index: number) => void
   onRename: (label: string) => void
   colorIndex: number
   compact: boolean
@@ -68,8 +66,6 @@ export function TimezoneCard({
   onTimeChange,
   onCopy,
   onRemove,
-  onMoveLeft ,
-  onMoveRight ,
   onRename,
   colorIndex,
   compact,
@@ -167,15 +163,6 @@ export function TimezoneCard({
                   <Pencil className="mr-2 h-3 w-3" /> Rename
                 </DropdownMenuItem>
                 <hr />
-                <DropdownMenuItem onClick={() => onMoveLeft(colorIndex)} >
-                  <ChevronsLeft className="mr-2 h-3 w-3 text-sm" />
-                  Move Left
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onMoveRight(colorIndex)} >
-                  <ChevronsRight className="mr-2 h-3 w-3 text-sm" />
-                  Move Right
-                </DropdownMenuItem>
-                <hr></hr>
                 <DropdownMenuItem onClick={handleDelete} className="text-sm text-destructive focus:text-destructive">
                   <Trash2 className="mr-2 h-3 w-3" />
                   Delete
