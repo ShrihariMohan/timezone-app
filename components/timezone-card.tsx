@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { toZonedTime, fromZonedTime } from "date-fns-tz"
-import { Copy, Trash2, Clock, MoreHorizontal, EqualIcon, ChevronsRight, ChevronsLeft } from "lucide-react"
+import { Copy, Trash2, Clock, MoreHorizontal, Equal, ChevronsRight, ChevronsLeft } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -143,7 +143,7 @@ export function TimezoneCard({
                   className="h-8 w-8 rounded-full hover:bg-background/20"
                   aria-label="More options"
                 >
-                  <EqualIcon className="h-6 w-6" />
+                  <Equal className="h-6 w-6" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" >
