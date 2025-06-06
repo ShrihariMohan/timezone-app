@@ -165,36 +165,29 @@ export default function TimezoneApp() {
     setAutoUpdate(true)
   }
 
-  const onMoveLeft = (index : number) => {
-    console.log("🔥 ~ onMoveLeft ~ index:", index, timezones)
-    if ( index === 0) { 
-      return
-    }
-    else {
-      console.log("🔥 ~ onMoveLeft ~ else:")
+  // Drag and drop handlers
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
-    const updatedTimezones = [...timezones]; // Create a new array
-    [updatedTimezones[index - 1], updatedTimezones[index]] = [updatedTimezones[index], updatedTimezones[index - 1]]; // Swap
-
-
-      console.log("🔥 ~ onMoveLeft ~ timezones:", updatedTimezones)
-      setTimezones(updatedTimezones)
-    }
-   
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index)
   }
 
-  const onMoveRight = (index : number) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
 
-    if ( index === timezones.length - 1) { 
+  const handleDrop = (index: number) => {
+    if (draggedIndex === null || draggedIndex === index) {
+      setDraggedIndex(null)
       return
     }
-    else {
-    const updatedTimezones = [...timezones]; // Create a new array
-    [updatedTimezones[index + 1], updatedTimezones[index]] = [updatedTimezones[index], updatedTimezones[index + 1]]; // Swap
-
-      setTimezones(updatedTimezones)
-    }
+    const updatedTimezones = [...timezones]
+    const [moved] = updatedTimezones.splice(draggedIndex, 1)
+    updatedTimezones.splice(index, 0, moved)
+    setDraggedIndex(null)
+    setTimezones(updatedTimezones)
   }
+
 
   // Filter timezones based on search query
   const filteredTimezones = allTimezones.filter(
@@ -333,21 +326,26 @@ export default function TimezoneApp() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 pb-20">
           {timezones.map((timezone, index) => (
-            <TimezoneCard
+            <div
               key={timezone}
-              timezone={timezone}
-              label={timezoneLabels[timezone] || timezone.replace(/_/g, " ")}
-              currentDateTime={currentDateTime}
-              onTimeChange={updateTime}
-              onCopy={() => copyTimeToClipboard(timezone)}
-              onRemove={() => removeTimezone(timezone)}
-              onMoveLeft={() => onMoveLeft(index)}
-              onMoveRight={() => onMoveRight(index)}
-              onRename={(label) => renameTimezone(timezone, label)}
-              compact={compactView}
-              isLocal={timezone === userTimezone}
-              colorIndex={index}
-            />
+              draggable
+              onDragStart={() => handleDragStart(index)}
+              onDragOver={handleDragOver}
+              onDrop={() => handleDrop(index)}
+            >
+              <TimezoneCard
+                timezone={timezone}
+                label={timezoneLabels[timezone] || timezone.replace(/_/g, " ")}
+                currentDateTime={currentDateTime}
+                onTimeChange={updateTime}
+                onCopy={() => copyTimeToClipboard(timezone)}
+                onRemove={() => removeTimezone(timezone)}
+                onRename={(label) => renameTimezone(timezone, label)}
+                compact={compactView}
+                isLocal={timezone === userTimezone}
+                colorIndex={index}
+              />
+            </div>
           ))}
         </div>
       </div>
