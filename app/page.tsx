@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
-import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown, RefreshCcw } from "lucide-react"
+import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown, RefreshCcw, Maximize2, Minimize2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -23,12 +23,18 @@ export default function TimezoneApp() {
   const [showToolbar, setShowToolbar] = useState<boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
+  const [timezoneLabels, setTimezoneLabels] = useState<Record<string, string>>({})
+  const [compactView, setCompactView] = useState<boolean>(false)
+  const [userTimezone, setUserTimezone] = useState<string>("")
 
   // Initialize timezones and theme
   useEffect(() => {
     const storedTimezones = localStorage.getItem("timezones")
     const storedTheme = localStorage.getItem("darkMode")
-    const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const storedLabels = localStorage.getItem("timezoneLabels")
+    const detectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+    setUserTimezone(detectedTimezone)
 
     // Set theme from localStorage
     if (storedTheme) {
@@ -42,13 +48,17 @@ export default function TimezoneApp() {
     // Set all available timezones
     setAllTimezones(getAllTimezones())
 
+    if (storedLabels) {
+      setTimezoneLabels(JSON.parse(storedLabels))
+    }
+
     if (storedTimezones) {
       setTimezones(JSON.parse(storedTimezones))
     } else {
       // Default timezones: user's local, UTC, and a random one
-      const availableTimezones = getAllTimezones().filter((tz) => tz !== userTimezone && tz !== "UTC")
+      const availableTimezones = getAllTimezones().filter((tz) => tz !== detectedTimezone && tz !== "UTC")
       const randomTimezone = availableTimezones[Math.floor(Math.random() * availableTimezones.length)]
-      const defaultTimezones = ["UTC" , userTimezone, "America/North_Dakota/Center" , "America/New_York"]
+      const defaultTimezones = ["UTC" , detectedTimezone, "America/North_Dakota/Center" , "America/New_York"]
       setTimezones(defaultTimezones)
       localStorage.setItem("timezones", JSON.stringify(defaultTimezones))
     }
@@ -65,6 +75,10 @@ export default function TimezoneApp() {
       if (interval) clearInterval(interval)
     }
   }, [autoUpdate])
+
+  useEffect(() => {
+    localStorage.setItem("timezoneLabels", JSON.stringify(timezoneLabels))
+  }, [timezoneLabels])
 
   // Save timezones to localStorage when they change
   useEffect(() => {
@@ -86,6 +100,10 @@ export default function TimezoneApp() {
   const addTimezone = () => {
     if (selectedTimezone && !timezones.includes(selectedTimezone)) {
       setTimezones([...timezones, selectedTimezone])
+      setTimezoneLabels((labels) => ({
+        ...labels,
+        [selectedTimezone]: selectedTimezone.replace(/_/g, " "),
+      }))
       setSelectedTimezone("")
       setPopoverOpen(false)
       toast(selectedTimezone, {
@@ -100,6 +118,11 @@ export default function TimezoneApp() {
 
   const removeTimezone = (timezone: string) => {
     setTimezones(timezones.filter((tz) => tz !== timezone))
+    setTimezoneLabels((labels) => {
+      const updated = { ...labels }
+      delete updated[timezone]
+      return updated
+    })
     toast(timezone, {
         description: `Removed ${timezone} from your list`,
         action: {
@@ -126,6 +149,10 @@ export default function TimezoneApp() {
       },
     })
 
+  }
+
+  const renameTimezone = (tz: string, newLabel: string) => {
+    setTimezoneLabels((labels) => ({ ...labels, [tz]: newLabel }))
   }
   
 
@@ -275,6 +302,16 @@ export default function TimezoneApp() {
               >
                 <RefreshCcw className="h-5 w-5" />
               </Button>
+
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setCompactView(!compactView)}
+                className="bg-background/50 backdrop-blur-sm border-0 hover:bg-background/70 rounded-full"
+                aria-label="Toggle view"
+              >
+                {compactView ? <Maximize2 className="h-5 w-5" /> : <Minimize2 className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
 
@@ -299,12 +336,16 @@ export default function TimezoneApp() {
             <TimezoneCard
               key={timezone}
               timezone={timezone}
+              label={timezoneLabels[timezone] || timezone.replace(/_/g, " ")}
               currentDateTime={currentDateTime}
               onTimeChange={updateTime}
               onCopy={() => copyTimeToClipboard(timezone)}
               onRemove={() => removeTimezone(timezone)}
               onMoveLeft={() => onMoveLeft(index)}
               onMoveRight={() => onMoveRight(index)}
+              onRename={(label) => renameTimezone(timezone, label)}
+              compact={compactView}
+              isLocal={timezone === userTimezone}
               colorIndex={index}
             />
           ))}
