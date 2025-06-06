@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import { format } from "date-fns"
 import { toZonedTime, fromZonedTime } from "date-fns-tz"
-import { Copy, Trash2, Equal, Pencil } from "lucide-react"
+import { Copy, Trash2, Equal, Pencil, Palette } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,7 +20,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu"
 
 // Array of modern gradient backgrounds
 const gradients = [
@@ -46,6 +56,28 @@ const textColors = [
   "text-teal-700 dark:text-teal-200",
 ]
 
+const colorNames = [
+  "Ocean Blue",
+  "Emerald Green",
+  "Royal Purple",
+  "Rose Pink",
+  "Sunny Amber",
+  "Indigo Sky",
+  "Sunset Red",
+  "Teal Breeze",
+]
+
+const colorSwatches = [
+  "bg-blue-400",
+  "bg-green-400",
+  "bg-purple-400",
+  "bg-pink-400",
+  "bg-amber-400",
+  "bg-indigo-400",
+  "bg-red-400",
+  "bg-teal-400",
+]
+
 interface TimezoneCardProps {
   timezone: string
   label: string
@@ -54,6 +86,7 @@ interface TimezoneCardProps {
   onCopy: () => void
   onRemove: () => void
   onRename: (label: string) => void
+  onColorChange: (index: number) => void
   colorIndex: number
   compact: boolean
   isLocal: boolean
@@ -67,6 +100,7 @@ export function TimezoneCard({
   onCopy,
   onRemove,
   onRename,
+  onColorChange,
   colorIndex,
   compact,
   isLocal,
@@ -162,6 +196,21 @@ export function TimezoneCard({
                 <DropdownMenuItem onClick={() => setRenameDialogOpen(true)}>
                   <Pencil className="mr-2 h-3 w-3" /> Rename
                 </DropdownMenuItem>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <Palette className="mr-2 h-3 w-3" /> Color
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuRadioGroup value={colorIndex.toString()} onValueChange={(v) => onColorChange(Number(v))}>
+                      {colorNames.map((name, idx) => (
+                        <DropdownMenuRadioItem key={idx} value={idx.toString()} className="flex items-center gap-2">
+                          <span className={`h-3 w-3 rounded-full ${colorSwatches[idx]}`}></span>
+                          {name}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
                 <hr />
                 <DropdownMenuItem onClick={handleDelete} className="text-sm text-destructive focus:text-destructive">
                   <Trash2 className="mr-2 h-3 w-3" />
