@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
-import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown, RefreshCcw, Maximize2, Minimize2 } from "lucide-react"
+import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown, RefreshCcw, Maximize2, Minimize2, Palette } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -24,6 +24,7 @@ export default function TimezoneApp() {
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
   const [timezoneLabels, setTimezoneLabels] = useState<Record<string, string>>({})
+  const [timezoneColors, setTimezoneColors] = useState<Record<string, number>>({})
   const [compactView, setCompactView] = useState<boolean>(false)
   const [userTimezone, setUserTimezone] = useState<string>("")
 
@@ -32,6 +33,7 @@ export default function TimezoneApp() {
     const storedTimezones = localStorage.getItem("timezones")
     const storedTheme = localStorage.getItem("darkMode")
     const storedLabels = localStorage.getItem("timezoneLabels")
+    const storedColors = localStorage.getItem("timezoneColors")
     const detectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
     setUserTimezone(detectedTimezone)
@@ -51,16 +53,34 @@ export default function TimezoneApp() {
     if (storedLabels) {
       setTimezoneLabels(JSON.parse(storedLabels))
     }
+    if (storedColors) {
+      setTimezoneColors(JSON.parse(storedColors))
+    }
 
     if (storedTimezones) {
-      setTimezones(JSON.parse(storedTimezones))
+      const tzs = JSON.parse(storedTimezones) as string[]
+      setTimezones(tzs)
+      if (!storedColors) {
+        const defaultColors: Record<string, number> = {}
+        tzs.forEach((tz, idx) => {
+          defaultColors[tz] = idx
+        })
+        setTimezoneColors(defaultColors)
+        localStorage.setItem("timezoneColors", JSON.stringify(defaultColors))
+      }
     } else {
       // Default timezones: user's local, UTC, and a random one
       const availableTimezones = getAllTimezones().filter((tz) => tz !== detectedTimezone && tz !== "UTC")
       const randomTimezone = availableTimezones[Math.floor(Math.random() * availableTimezones.length)]
-      const defaultTimezones = ["UTC" , detectedTimezone, "America/North_Dakota/Center" , "America/New_York"]
+      const defaultTimezones = ["UTC", detectedTimezone, "America/North_Dakota/Center", "America/New_York"]
       setTimezones(defaultTimezones)
       localStorage.setItem("timezones", JSON.stringify(defaultTimezones))
+      const defaultColors: Record<string, number> = {}
+      defaultTimezones.forEach((tz, idx) => {
+        defaultColors[tz] = idx
+      })
+      setTimezoneColors(defaultColors)
+      localStorage.setItem("timezoneColors", JSON.stringify(defaultColors))
     }
 
     // Update time periodically when auto update is enabled
@@ -79,6 +99,10 @@ export default function TimezoneApp() {
   useEffect(() => {
     localStorage.setItem("timezoneLabels", JSON.stringify(timezoneLabels))
   }, [timezoneLabels])
+
+  useEffect(() => {
+    localStorage.setItem("timezoneColors", JSON.stringify(timezoneColors))
+  }, [timezoneColors])
 
   // Save timezones to localStorage when they change
   useEffect(() => {
@@ -100,6 +124,10 @@ export default function TimezoneApp() {
   const addTimezone = () => {
     if (selectedTimezone && !timezones.includes(selectedTimezone)) {
       setTimezones([...timezones, selectedTimezone])
+      setTimezoneColors((colors) => ({
+        ...colors,
+        [selectedTimezone]: timezones.length,
+      }))
       setTimezoneLabels((labels) => ({
         ...labels,
         [selectedTimezone]: selectedTimezone.replace(/_/g, " "),
@@ -118,6 +146,11 @@ export default function TimezoneApp() {
 
   const removeTimezone = (timezone: string) => {
     setTimezones(timezones.filter((tz) => tz !== timezone))
+    setTimezoneColors((colors) => {
+      const updated = { ...colors }
+      delete updated[timezone]
+      return updated
+    })
     setTimezoneLabels((labels) => {
       const updated = { ...labels }
       delete updated[timezone]
@@ -153,6 +186,10 @@ export default function TimezoneApp() {
 
   const renameTimezone = (tz: string, newLabel: string) => {
     setTimezoneLabels((labels) => ({ ...labels, [tz]: newLabel }))
+  }
+
+  const updateColor = (tz: string, index: number) => {
+    setTimezoneColors((colors) => ({ ...colors, [tz]: index }))
   }
   
 
@@ -332,6 +369,7 @@ export default function TimezoneApp() {
               onDragStart={() => handleDragStart(index)}
               onDragOver={handleDragOver}
               onDrop={() => handleDrop(index)}
+              className="cursor-grab active:cursor-grabbing"
             >
               <TimezoneCard
                 timezone={timezone}
@@ -341,9 +379,14 @@ export default function TimezoneApp() {
                 onCopy={() => copyTimeToClipboard(timezone)}
                 onRemove={() => removeTimezone(timezone)}
                 onRename={(label) => renameTimezone(timezone, label)}
+                onColorChange={(idx) => updateColor(timezone, idx)}
                 compact={compactView}
                 isLocal={timezone === userTimezone}
-                colorIndex={index}
+                colorIndex={
+                  timezoneColors[timezone] !== undefined
+                    ? timezoneColors[timezone]
+                    : index
+                }
               />
             </div>
           ))}
