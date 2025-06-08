@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import type { Metadata } from "next"
+import Head from "next/head"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
 import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown, RefreshCcw, Maximize2, Minimize2, Palette } from "lucide-react"
@@ -14,11 +14,6 @@ import { getAllTimezones } from "@/lib/timezones"
 import { getTimezoneOffset } from "@/lib/timezone-utils"
 import { toast } from "sonner"
 
-export const metadata: Metadata = {
-  title: "Timezone App",
-  description:
-    "A modern timezone application for developers and remote employees to manage multiple timezones.",
-}
 
 export default function TimezoneApp() {
   const [timezones, setTimezones] = useState<string[]>([])
@@ -239,14 +234,22 @@ export default function TimezoneApp() {
   )
 
   return (
-    <div
-      className={cn(
-        "min-h-screen p-4 md:p-8 md:pb-16 transition-colors",
-        darkMode
-          ? "bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100"
-          : "bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900",
-      )}
-    >
+    <>
+      <Head>
+        <title>Timezone App</title>
+        <meta
+          name="description"
+          content="A modern timezone application for developers and remote employees to manage multiple timezones."
+        />
+      </Head>
+      <div
+        className={cn(
+          "min-h-screen p-4 md:p-8 md:pb-16 transition-colors",
+          darkMode
+            ? "bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100"
+            : "bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900",
+        )}
+      >
       <div className="max-w-7xl mx-auto">
         {/* <header className="flex justify-between items-center mb-8">
           <h1 className="text-2xl md:text-3xl font-bold">Timezone Converter</h1>
@@ -400,6 +403,7 @@ export default function TimezoneApp() {
         </div>
       </div>
     </div>
+    </>
   )
 }
 
