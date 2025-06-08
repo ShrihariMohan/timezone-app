@@ -1,10 +1,33 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from "@/components/ui/sonner"
+import RegisterSW from './register-sw'
 
 export const metadata: Metadata = {
   title: 'Timezone App',
-  description: 'Created by Shrihari',
+  description: 'Multi-timezone tracker for developers and remote workers.',
+  applicationName: 'Timezone App',
+  keywords: ['timezones', 'world clock', 'developers', 'remote work'],
+  manifest: '/manifest.json',
+  themeColor: '#ffffff',
+  openGraph: {
+    title: 'Timezone App - Multi-Timezone Tracker for Developers',
+    description:
+      'A modern timezone application for developers and remote employees to manage and compare multiple timezones effortlessly.',
+    url: 'https://app-timezone.vercel.app/',
+    siteName: 'Timezone App',
+    images: '/og-image.png',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Timezone App - Multi-Timezone Tracker for Developers',
+    description:
+      'A simple yet powerful timezone manager for developers and remote workers.',
+    images: ['/og-image.png'],
+    creator: '@papashrihari',
+  },
 }
 
 export default function RootLayout({
@@ -15,24 +38,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta property="og:title" content="Timezone App - Multi-Timezone Tracker for Developers" />
-        <meta property="og:description" content="A modern timezone application for developers and remote employees to manage and compare multiple timezones effortlessly." />
-        <meta property="og:image" content="https://app-timezone.vercel.app/og-image.png" />
-        <meta property="og:url" content="https://app-timezone.vercel.app/" />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Timezone App" />
-        <meta property="og:locale" content="en_US" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Timezone App - Multi-Timezone Tracker for Developers" />
-        <meta name="twitter:description" content="A simple yet powerful timezone manager for developers and remote workers." />
-        <meta name="twitter:image" content="https://app-timezone.vercel.app/og-image.png" />
-        <meta name="twitter:url" content="https://app-timezone.vercel.app/" />
-        <meta name="twitter:creator" content="@papashrihari" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#ffffff" />
       </head>
       <body>
         {children}
         <Toaster />
+        <RegisterSW />
       </body>
       
     </html>

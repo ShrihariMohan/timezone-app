@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import type { Metadata } from "next"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
 import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown, RefreshCcw, Maximize2, Minimize2, Palette } from "lucide-react"
@@ -12,6 +13,12 @@ import { TimezoneCard } from "@/components/timezone-card"
 import { getAllTimezones } from "@/lib/timezones"
 import { getTimezoneOffset } from "@/lib/timezone-utils"
 import { toast } from "sonner"
+
+export const metadata: Metadata = {
+  title: "Timezone App",
+  description:
+    "A modern timezone application for developers and remote employees to manage multiple timezones.",
+}
 
 export default function TimezoneApp() {
   const [timezones, setTimezones] = useState<string[]>([])
