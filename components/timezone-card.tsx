@@ -34,14 +34,18 @@ import {
 
 // Array of modern gradient backgrounds
 const gradients = [
-  "bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-800/30 dark:to-indigo-800/30",
-  "bg-gradient-to-br from-green-100 to-emerald-200 dark:from-green-800/30 dark:to-emerald-800/30",
-  "bg-gradient-to-br from-purple-100 to-violet-200 dark:from-purple-800/30 dark:to-violet-800/30",
-  "bg-gradient-to-br from-pink-100 to-rose-200 dark:from-pink-800/30 dark:to-rose-800/30",
-  "bg-gradient-to-br from-amber-100 to-yellow-200 dark:from-amber-800/30 dark:to-yellow-800/30",
-  "bg-gradient-to-br from-indigo-100 to-blue-200 dark:from-indigo-800/30 dark:to-blue-800/30",
-  "bg-gradient-to-br from-red-100 to-orange-200 dark:from-red-800/30 dark:to-orange-800/30",
-  "bg-gradient-to-br from-teal-100 to-cyan-200 dark:from-teal-800/30 dark:to-cyan-800/30",
+  "bg-gradient-to-br from-blue-100 to-indigo-200 dark:from-blue-900/40 dark:to-indigo-900/40",
+  "bg-gradient-to-br from-green-100 to-emerald-200 dark:from-green-900/40 dark:to-emerald-900/40",
+  "bg-gradient-to-br from-purple-100 to-violet-200 dark:from-purple-900/40 dark:to-violet-900/40",
+  "bg-gradient-to-br from-pink-100 to-rose-200 dark:from-pink-900/40 dark:to-rose-900/40",
+  "bg-gradient-to-br from-amber-100 to-yellow-200 dark:from-amber-900/40 dark:to-yellow-900/40",
+  "bg-gradient-to-br from-indigo-100 to-blue-200 dark:from-indigo-900/40 dark:to-blue-900/40",
+  "bg-gradient-to-br from-red-100 to-orange-200 dark:from-red-900/40 dark:to-orange-900/40",
+  "bg-gradient-to-br from-teal-100 to-cyan-200 dark:from-teal-900/40 dark:to-cyan-900/40",
+  "bg-gradient-to-br from-orange-100 to-amber-200 dark:from-orange-900/40 dark:to-amber-900/40",
+  "bg-gradient-to-br from-lime-100 to-lime-200 dark:from-lime-900/40 dark:to-lime-900/40",
+  "bg-gradient-to-br from-cyan-100 to-sky-200 dark:from-cyan-900/40 dark:to-sky-900/40",
+  "bg-gradient-to-br from-rose-100 to-red-200 dark:from-rose-900/40 dark:to-red-900/40",
 ]
 
 // Text colors to match gradients
@@ -54,6 +58,10 @@ const textColors = [
   "text-indigo-700 dark:text-indigo-200",
   "text-red-700 dark:text-red-200",
   "text-teal-700 dark:text-teal-200",
+  "text-orange-700 dark:text-orange-200",
+  "text-lime-700 dark:text-lime-200",
+  "text-cyan-700 dark:text-cyan-200",
+  "text-rose-700 dark:text-rose-200",
 ]
 
 const colorNames = [
@@ -65,6 +73,10 @@ const colorNames = [
   "Indigo Sky",
   "Sunset Red",
   "Teal Breeze",
+  "Orange Burst",
+  "Lime Twist",
+  "Sky Blue",
+  "Rose Red",
 ]
 
 const colorSwatches = [
@@ -76,6 +88,10 @@ const colorSwatches = [
   "bg-indigo-400",
   "bg-red-400",
   "bg-teal-400",
+  "bg-orange-400",
+  "bg-lime-400",
+  "bg-cyan-400",
+  "bg-rose-400",
 ]
 
 interface TimezoneCardProps {
