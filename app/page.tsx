@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Head from "next/head"
 import { format } from "date-fns"
 import { toZonedTime } from "date-fns-tz"
-import { Plus, Sun, Moon, Search, ChevronUp, ChevronDown, RefreshCcw, Maximize2, Minimize2, Palette } from "lucide-react"
+import { Plus, Sun, Moon, Search, RefreshCcw, Maximize2, Minimize2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -22,7 +22,6 @@ export default function TimezoneApp() {
   const [currentDateTime, setCurrentDateTime] = useState<Date>(new Date())
   const [autoUpdate, setAutoUpdate] = useState<boolean>(true)
   const [darkMode, setDarkMode] = useState<boolean>(false)
-  const [showToolbar, setShowToolbar] = useState<boolean>(true)
   const [searchQuery, setSearchQuery] = useState<string>("")
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false)
   const [timezoneLabels, setTimezoneLabels] = useState<Record<string, string>>({})
@@ -195,9 +194,6 @@ export default function TimezoneApp() {
   }
   
 
-  const toggleToolbar = () => {
-    setShowToolbar(!showToolbar)
-  }
 
   const resetTime = () => {
     setCurrentDateTime(new Date())
@@ -264,26 +260,25 @@ export default function TimezoneApp() {
           </Link>
         </div> */}
 
-        {/* Floating Glassmorphism Toolbar */}
-        <div className="fixed bottom-0  sm:bottom-8 left-1/2 transform -translate-x-1/2 z-10 ">
-          <div
-            className={cn(
-              "transition-all duration-300 ease-in-out",
-              showToolbar ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none",
-            )}
-          >
-            <div className="flex items-center gap-4 p-4 sm:rounded-full backdrop-blur-md bg-background/60 border border-background/20 shadow-lg">
+        {/* Sticky Navbar */}
+        <header className="sticky top-0 z-20 w-full bg-background/80 backdrop-blur-md border-b border-border">
+          <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 p-2">
+            <div className="flex items-center gap-2">
+              <img src="/placeholder-logo.svg" alt="Logo" className="h-8 w-8" />
+              <span className="font-semibold text-lg">Timezone App</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
               <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-[240px] md:w-[320px] justify-between bg-background/50 border-0"
+                    className="w-[200px] sm:w-[240px] justify-between bg-background/50 border-0"
                   >
                     {selectedTimezone ? selectedTimezone.replace(/_/g, " ") : "Select a timezone"}
                     <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[240px] md:w-[320px] p-0" align="start">
+                <PopoverContent className="w-[200px] sm:w-[240px] p-0" align="start">
                   <Command>
                     <CommandInput placeholder="Search timezone..." value={searchQuery} onValueChange={setSearchQuery} />
                     <CommandList className="max-h-[300px]">
@@ -298,7 +293,7 @@ export default function TimezoneApp() {
                               onSelect={(value) => {
                                 setSelectedTimezone(value)
                                 setSearchQuery("")
-                                setPopoverOpen(false) // Close popover on selection
+                                setPopoverOpen(false)
                               }}
                             >
                               <span className="flex justify-between w-full">
@@ -311,7 +306,6 @@ export default function TimezoneApp() {
                       </CommandGroup>
                     </CommandList>
                   </Command>
-
                 </PopoverContent>
               </Popover>
 
@@ -354,24 +348,9 @@ export default function TimezoneApp() {
               </Button>
             </div>
           </div>
+        </header>
 
-          {/* Improved Toggle button for toolbar */}
-          <Button
-            variant={darkMode ? "default" : "default"}
-            size="sm"
-            onClick={toggleToolbar}
-            className={cn(
-              "invisible sm:visible absolute -bottom-11 left-1/2 transform -translate-x-1/2 rounded-full w-12 h-12 p-0",
-              "shadow-lg border-2",
-              darkMode ? "border-gray-700" : "border-gray-200",
-              
-            )}
-          >
-            {showToolbar ? <ChevronDown className="h-6 w-6" /> : <ChevronUp className="h-6 w-6" />}
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 pb-8">
           {timezones.map((timezone, index) => (
             <div
               key={timezone}
