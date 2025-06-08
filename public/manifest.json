@@ -2,8 +2,22 @@
   "name": "Timezone App",
   "short_name": "Timezone",
   "description": "Multi-timezone tracker for developers and remote workers.",
-  "start_url": "/",
+  "start_url": "https://app-timezone.vercel.app/",
   "display": "standalone",
   "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "icon": [
+    {
+      "src": "/512x512.jpeg",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/512x512.jpeg",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
 }

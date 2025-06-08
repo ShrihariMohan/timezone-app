@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   applicationName: 'Timezone App',
   keywords: ['timezones', 'world clock', 'developers', 'remote work'],
   manifest: '/manifest.json',
-  themeColor: '#ffffff',
   openGraph: {
     title: 'Timezone App - Multi-Timezone Tracker for Developers',
     description:
@@ -39,7 +38,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
+        <link rel="icon" type="image/x-icon" href="/favicon.jpeg" />
+
       </head>
       <body>
         {children}
