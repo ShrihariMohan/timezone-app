@@ -265,14 +265,14 @@ export default function TimezoneApp() {
         </div> */}
 
         {/* Floating Glassmorphism Toolbar */}
-        <div className="fixed bottom-0  sm:bottom-8 left-1/2 transform -translate-x-1/2 z-10 ">
+        <div className="fixed bottom-0 left-0 w-full sm:w-auto sm:bottom-8 sm:left-1/2 sm:-translate-x-1/2 z-10 p-2">
           <div
             className={cn(
               "transition-all duration-300 ease-in-out",
-              showToolbar ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10 pointer-events-none",
+              showToolbar ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full pointer-events-none",
             )}
           >
-            <div className="flex items-center gap-4 p-4 sm:rounded-full backdrop-blur-md bg-background/60 border border-background/20 shadow-lg">
+            <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 p-2 sm:p-4 sm:rounded-full backdrop-blur-md bg-background/60 border-t sm:border border-background/20 shadow-lg">
               <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -361,10 +361,10 @@ export default function TimezoneApp() {
             size="sm"
             onClick={toggleToolbar}
             className={cn(
-              "invisible sm:visible absolute -bottom-11 left-1/2 transform -translate-x-1/2 rounded-full w-12 h-12 p-0",
+              "absolute -top-12 right-4 sm:-bottom-11 sm:left-1/2 sm:-translate-x-1/2 rounded-full w-12 h-12 p-0",
               "shadow-lg border-2",
               darkMode ? "border-gray-700" : "border-gray-200",
-              
+
             )}
           >
             {showToolbar ? <ChevronDown className="h-6 w-6" /> : <ChevronUp className="h-6 w-6" />}
