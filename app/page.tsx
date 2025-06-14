@@ -244,7 +244,7 @@ export default function TimezoneApp() {
       </Head>
       <div
         className={cn(
-          "min-h-screen p-4 md:p-8 md:pb-16 transition-colors",
+          "min-h-screen p-4 md:p-8 md:pb-24 transition-colors",
           darkMode
             ? "bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100"
             : "bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900",
@@ -265,7 +265,7 @@ export default function TimezoneApp() {
         </div> */}
 
         {/* Floating Glassmorphism Toolbar */}
-        <div className="fixed bottom-0 left-0 w-full sm:w-auto sm:bottom-8 sm:left-1/2 sm:-translate-x-1/2 z-10 p-2">
+        <div className="fixed bottom-0 left-0 w-full sm:w-auto sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 z-10 p-2">
           <div
             className={cn(
               "transition-all duration-300 ease-in-out",
@@ -356,7 +356,7 @@ export default function TimezoneApp() {
           </div>
 
           {/* Improved Toggle button for toolbar */}
-          <Button
+          {/* <Button
             variant={darkMode ? "default" : "default"}
             size="sm"
             onClick={toggleToolbar}
@@ -368,10 +368,10 @@ export default function TimezoneApp() {
             )}
           >
             {showToolbar ? <ChevronDown className="h-6 w-6" /> : <ChevronUp className="h-6 w-6" />}
-          </Button>
+          </Button> */}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 pb-32">
           {timezones.map((timezone, index) => (
             <div
               key={timezone}
