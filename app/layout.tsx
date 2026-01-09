@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from "@/components/ui/sonner"
-import RegisterSW from './register-sw'
 
 export const metadata: Metadata = {
   title: 'Timezone App',
@@ -44,7 +43,6 @@ export default function RootLayout({
       <body>
         {children}
         <Toaster />
-        <RegisterSW />
       </body>
       
     </html>
