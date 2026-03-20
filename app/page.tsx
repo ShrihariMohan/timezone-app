@@ -244,13 +244,80 @@ export default function TimezoneApp() {
       </Head>
       <div
         className={cn(
-          "min-h-screen p-4 md:p-8 md:pb-24 transition-colors",
+          "min-h-screen p-4 md:p-8 md:pb-24 transition-colors relative overflow-hidden",
           darkMode
-            ? "bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100"
-            : "bg-gradient-to-br from-gray-50 to-gray-100 text-gray-900",
+            ? "bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-gray-100"
+            : "bg-gradient-to-br from-rose-50 via-slate-50 to-sky-100 text-gray-900",
         )}
       >
-      <div className="max-w-7xl mx-auto">
+        {/* Rich Background Elements */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          {/* Gradient Orbs */}
+          <div
+            className={cn(
+              "absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full blur-3xl",
+              darkMode
+                ? "bg-gradient-to-br from-violet-600 to-indigo-800 opacity-30"
+                : "bg-gradient-to-br from-orange-300 to-rose-400 opacity-40"
+            )}
+          />
+          <div
+            className={cn(
+              "absolute top-1/3 -left-32 w-[400px] h-[400px] rounded-full blur-3xl",
+              darkMode
+                ? "bg-gradient-to-br from-cyan-600 to-blue-800 opacity-25"
+                : "bg-gradient-to-br from-violet-300 to-purple-400 opacity-35"
+            )}
+          />
+          <div
+            className={cn(
+              "absolute bottom-1/4 right-1/4 w-[350px] h-[350px] rounded-full blur-3xl",
+              darkMode
+                ? "bg-gradient-to-br from-purple-600 to-pink-700 opacity-20"
+                : "bg-gradient-to-br from-sky-300 to-cyan-400 opacity-40"
+            )}
+          />
+          <div
+            className={cn(
+              "absolute -bottom-20 left-1/3 w-[450px] h-[450px] rounded-full blur-3xl",
+              darkMode
+                ? "bg-gradient-to-br from-emerald-700 to-teal-800 opacity-25"
+                : "bg-gradient-to-br from-emerald-200 to-teal-300 opacity-50"
+            )}
+          />
+          <div
+            className={cn(
+              "absolute top-1/2 right-1/3 w-[300px] h-[300px] rounded-full blur-3xl",
+              darkMode
+                ? "bg-gradient-to-br from-rose-700 to-orange-800 opacity-15"
+                : "bg-gradient-to-br from-amber-200 to-yellow-300 opacity-45"
+            )}
+          />
+          
+          {/* Subtle Grid Pattern */}
+          <div
+            className={cn(
+              "absolute inset-0 opacity-[0.015]",
+              darkMode ? "opacity-[0.03]" : "opacity-[0.02]"
+            )}
+            style={{
+              backgroundImage: `linear-gradient(${darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'} 1px, transparent 1px), linear-gradient(90deg, ${darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'} 1px, transparent 1px)`,
+              backgroundSize: '64px 64px',
+            }}
+          />
+          
+          {/* Noise Texture Overlay */}
+          <div
+            className={cn(
+              "absolute inset-0",
+              darkMode ? "opacity-[0.15]" : "opacity-[0.08]"
+            )}
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            }}
+          />
+        </div>
+      <div className="max-w-7xl mx-auto relative z-[1]">
         {/* <header className="flex justify-between items-center mb-8">
           <h1 className="text-2xl md:text-3xl font-bold">Timezone Converter</h1>
         </header> */}
@@ -265,21 +332,46 @@ export default function TimezoneApp() {
         </div> */}
 
         {/* Floating Glassmorphism Toolbar */}
-        <div className="fixed bottom-0 left-0 w-full sm:w-auto sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 z-10 p-2">
+        <div className="fixed bottom-0 left-0 w-full sm:w-auto sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 z-10 p-2">
           <div
             className={cn(
               "transition-all duration-300 ease-in-out",
               showToolbar ? "opacity-100 translate-y-0" : "opacity-0 translate-y-full pointer-events-none",
             )}
           >
-            <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 p-2 sm:p-4 sm:rounded-full backdrop-blur-md bg-background/60 border-t sm:border border-background/20 shadow-lg">
+            <div
+              className={cn(
+                "relative flex flex-wrap justify-center items-center gap-2 sm:gap-3 p-3 sm:p-4 sm:rounded-2xl",
+                "backdrop-blur-xl border-t sm:border",
+                darkMode
+                  ? "bg-slate-900/70 border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4),0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+                  : "bg-white/80 border-white/60 shadow-[0_8px_40px_rgba(0,0,0,0.15),0_0_80px_rgba(255,255,255,0.6)_inset]"
+              )}
+            >
+              {/* Subtle inner glow */}
+              <div
+                className={cn(
+                  "absolute inset-0 sm:rounded-2xl opacity-50 pointer-events-none",
+                  darkMode
+                    ? "bg-gradient-to-t from-transparent via-transparent to-white/5"
+                    : "bg-gradient-to-t from-transparent via-transparent to-white/80"
+                )}
+              />
+              
               <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-[240px] md:w-[320px] justify-between bg-background/50 border-0"
+                    className={cn(
+                      "relative w-[220px] md:w-[300px] justify-between rounded-xl h-11 transition-all duration-200",
+                      darkMode
+                        ? "bg-slate-800/60 border-white/10 hover:bg-slate-700/60 hover:border-white/20"
+                        : "bg-white/60 border-slate-200/80 hover:bg-white/80 hover:border-slate-300"
+                    )}
                   >
-                    {selectedTimezone ? selectedTimezone.replace(/_/g, " ") : "Select a timezone"}
+                    <span className="truncate">
+                      {selectedTimezone ? selectedTimezone.replace(/_/g, " ") : "Search timezones..."}
+                    </span>
                     <Search className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -298,7 +390,7 @@ export default function TimezoneApp() {
                               onSelect={(value) => {
                                 setSelectedTimezone(value)
                                 setSearchQuery("")
-                                setPopoverOpen(false) // Close popover on selection
+                                setPopoverOpen(false)
                               }}
                             >
                               <span className="flex justify-between w-full">
@@ -311,47 +403,75 @@ export default function TimezoneApp() {
                       </CommandGroup>
                     </CommandList>
                   </Command>
-
                 </PopoverContent>
               </Popover>
 
               <Button
                 onClick={addTimezone}
                 disabled={!selectedTimezone || timezones.includes(selectedTimezone)}
-                className="rounded-full bg-primary/80 hover:bg-primary"
+                size="icon"
+                className={cn(
+                  "relative rounded-xl h-11 w-11 transition-all duration-200",
+                  darkMode
+                    ? "bg-white/10 hover:bg-white/20 text-white border border-white/10 hover:border-white/20"
+                    : "bg-slate-900 hover:bg-slate-800 text-white",
+                  "disabled:opacity-30 disabled:cursor-not-allowed"
+                )}
               >
-                <Plus className="mr-2 h-4 w-4" /> Add
+                <Plus className="h-5 w-5" />
               </Button>
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setDarkMode(!darkMode)}
-                className="bg-background/50 backdrop-blur-sm border-0 hover:bg-background/70 rounded-full"
-                aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-              >
-                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-              </Button>
+              <div className={cn(
+                "hidden sm:block w-px h-8 mx-1",
+                darkMode ? "bg-white/10" : "bg-slate-200"
+              )} />
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={resetTime}
-                className="bg-background/50 backdrop-blur-sm border-0 hover:bg-background/70 rounded-full"
-                aria-label="Reset to current time"
-              >
-                <RefreshCcw className="h-5 w-5" />
-              </Button>
+              <div className="flex items-center gap-1.5">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setDarkMode(!darkMode)}
+                  className={cn(
+                    "relative rounded-xl h-11 w-11 transition-all duration-200",
+                    darkMode
+                      ? "hover:bg-white/10 text-amber-400 hover:text-amber-300"
+                      : "hover:bg-slate-100 text-slate-600 hover:text-violet-600"
+                  )}
+                  aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+                >
+                  {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                </Button>
 
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => setCompactView(!compactView)}
-                className="bg-background/50 backdrop-blur-sm border-0 hover:bg-background/70 rounded-full"
-                aria-label="Toggle view"
-              >
-                {compactView ? <Maximize2 className="h-5 w-5" /> : <Minimize2 className="h-5 w-5" />}
-              </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={resetTime}
+                  className={cn(
+                    "relative rounded-xl h-11 w-11 transition-all duration-200",
+                    darkMode
+                      ? "hover:bg-white/10 text-slate-400 hover:text-emerald-400"
+                      : "hover:bg-slate-100 text-slate-600 hover:text-emerald-600"
+                  )}
+                  aria-label="Reset to current time"
+                >
+                  <RefreshCcw className="h-5 w-5" />
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setCompactView(!compactView)}
+                  className={cn(
+                    "relative rounded-xl h-11 w-11 transition-all duration-200",
+                    darkMode
+                      ? "hover:bg-white/10 text-slate-400 hover:text-cyan-400"
+                      : "hover:bg-slate-100 text-slate-600 hover:text-cyan-600"
+                  )}
+                  aria-label="Toggle view"
+                >
+                  {compactView ? <Maximize2 className="h-5 w-5" /> : <Minimize2 className="h-5 w-5" />}
+                </Button>
+              </div>
             </div>
           </div>
 
